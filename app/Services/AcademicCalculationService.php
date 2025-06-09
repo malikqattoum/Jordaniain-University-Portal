@@ -51,7 +51,7 @@ class AcademicCalculationService
 
         $cumulativeCreditHours = $previousRecords->sum('semester_credit_hours') + $semesterCreditHours;
         $totalSuccessfulHours = $previousRecords->sum('successful_credit_hours') + $passedCreditHours;
-        
+
         $totalCumulativePoints = $previousRecords->sum(function($record) {
             return $record->semester_gpa * $record->semester_credit_hours;
         }) + ($semesterGpa * $semesterCreditHours);
@@ -130,8 +130,14 @@ class AcademicCalculationService
      */
     public function calculateProgressToGraduation(Student $student): array
     {
-        $totalRequiredHours = 72; // Law College requirement
-        $completedHours = $student->successful_credit_hours;
+        $totalRequiredHours = 141; // Law College requirement
+        // Get equivalent courses credit hours
+        $equivalentHours = $student->equivalentCourses ? $student->equivalentCourses->sum('credit_hours') : 0;
+        // If equivalentCourses is a relation, eager load and sum
+        if (method_exists($student, 'equivalentCourses')) {
+            $equivalentHours = $student->equivalentCourses()->sum('credit_hours');
+        }
+        $completedHours = $student->successful_credit_hours + $equivalentHours;
         $remainingHours = max(0, $totalRequiredHours - $completedHours);
         $progressPercentage = min(100, ($completedHours / $totalRequiredHours) * 100);
 

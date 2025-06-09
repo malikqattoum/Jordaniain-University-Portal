@@ -63,7 +63,7 @@ class CourseSeeder extends Seeder
                 'course_name' => 'Administrative Law',
                 'course_name_ar' => 'القانون الإداري',
                 'credit_hours' => 3,
-                'college' => 'كلية الح��وق',
+                'college' => 'كلية الحقوق',
                 'department' => 'القانون'
             ],
             [

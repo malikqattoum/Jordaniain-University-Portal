@@ -19,7 +19,7 @@ class AcademicResultsController extends Controller
     public function index(Request $request)
     {
         $student = Auth::guard('student')->user();
-        
+
         // Get available academic years for the student
         $academicYears = Enrollment::where('student_id', $student->id)
             ->distinct()
@@ -55,6 +55,8 @@ class AcademicResultsController extends Controller
             $academicRecord = $this->calculateSemesterStats($student, $selectedYear, $selectedSemester, $enrollments);
         }
 
+        $equivalentCourses = $student->equivalentCourses()->get();
+
         return view('academic-results', compact(
             'student',
             'enrollments',
@@ -62,7 +64,8 @@ class AcademicResultsController extends Controller
             'academicYears',
             'semesters',
             'selectedYear',
-            'selectedSemester'
+            'selectedSemester',
+            'equivalentCourses'
         ));
     }
 
@@ -96,7 +99,7 @@ class AcademicResultsController extends Controller
 
         $cumulativeCreditHours = $previousRecords->sum('semester_credit_hours') + $semesterCreditHours;
         $totalSuccessfulHours = $previousRecords->sum('successful_credit_hours') + $passedCreditHours;
-        
+
         $totalCumulativePoints = $previousRecords->sum(function($record) {
             return $record->semester_gpa * $record->semester_credit_hours;
         }) + ($semesterGpa * $semesterCreditHours);
@@ -129,10 +132,10 @@ class AcademicResultsController extends Controller
     {
         $student = Auth::guard('student')->user();
         $graduationProgress = $academicService->calculateProgressToGraduation($student);
-        
+
         // Get equivalent courses for the student
         $equivalentCourses = $student->equivalentCourses()->get();
-        
+
         return view('dashboard', compact('student', 'graduationProgress', 'equivalentCourses'));
     }
 }

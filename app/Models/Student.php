@@ -67,10 +67,10 @@ class Student extends Authenticatable
         // Extract first name from Arabic name
         $nameParts = explode(' ', trim($arabicName));
         $firstName = $nameParts[0];
-        
+
         // Convert Arabic name to abbreviation
         $abbreviation = self::arabicNameToAbbreviation($firstName);
-        
+
         return strtolower($abbreviation . $studentId);
     }
 
@@ -83,7 +83,7 @@ class Student extends Authenticatable
             'جميلة' => 'jml',
             'أحمد' => 'ahd',
             'فاطمة' => 'ftm',
-            'ا��راهيم' => 'ibr',
+            'ابراهيم' => 'ibr',
             'يوسف' => 'ysf',
             'خالد' => 'khd',
             'محمد' => 'mhd',

@@ -55,7 +55,7 @@
             <div class="card-header">
                 <h5 class="mb-0">
                     <i class="fas fa-list me-2"></i>
-                    المواد المسجلة - {{ $selectedYear }}/{{ $selectedYear + 1 }} - الفصل 
+                    المواد المسجلة - {{ $selectedYear }}/{{ $selectedYear + 1 }} - الفصل
                     @if($selectedSemester == 1) الأول
                     @elseif($selectedSemester == 2) الثاني
                     @elseif($selectedSemester == 3) الصيفي
@@ -84,7 +84,7 @@
                                 <td>
                                     @if($enrollment->grade)
                                         <span class="badge bg-{{ $enrollment->is_passed ? 'success' : 'danger' }}">
-                                            {{ $enrollment->getGradeInArabic() }}
+                                            {{ $enrollment->getGradeInArabic() }}  {{ $enrollment->grade }}
                                         </span>
                                     @else
                                         <span class="badge bg-secondary">لم تحدد</span>
@@ -131,7 +131,7 @@
                         <div class="stat-label">المعدل الفصلي</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-value">{{ $academicRecord->cumulative_credit_hours }}</div>
+                        <div class="stat-value">{{ $academicRecord->cumulative_credit_hours + ($equivalentCourses ? $equivalentCourses->sum('credit_hours') : 0) }}</div>
                         <div class="stat-label">الساعات التراكمية</div>
                     </div>
                     <div class="stat-card">
@@ -139,7 +139,7 @@
                         <div class="stat-label">المعدل التراكمي</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-value">{{ $academicRecord->successful_credit_hours }}</div>
+                        <div class="stat-value">{{ $academicRecord->successful_credit_hours + ($equivalentCourses ? $equivalentCourses->sum('credit_hours') : 0) }}</div>
                         <div class="stat-label">س.م. بنجاح</div>
                     </div>
                     <div class="stat-card">

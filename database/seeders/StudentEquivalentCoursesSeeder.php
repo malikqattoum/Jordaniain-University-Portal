@@ -120,7 +120,7 @@ class StudentEquivalentCoursesSeeder extends Seeder
             ],
             [
                 'equivalent_course_code' => '1001313',
-                'equivalent_course_name' => 'الملكية الف��رية',
+                'equivalent_course_name' => 'الملكية الفكرية',
                 'credit_hours' => 3,
                 'college' => 'كلية الحقوق',
                 'status' => 'معادلة'
