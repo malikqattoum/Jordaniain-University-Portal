@@ -148,7 +148,7 @@
                             @elseif($academicRecord->semester_status == 'probation') إنذار أكاديمي
                             @elseif($academicRecord->semester_status == 'warning') تحذير
                             @elseif($academicRecord->semester_status == 'excellent') ممتاز
-                            @elseif($academicRecord->semester_status == 'honor') شرف
+                            @elseif($academicRecord->semester_status == 'honor') مشرف
                             @else {{ $academicRecord->semester_status }}
                             @endif
                         </div>

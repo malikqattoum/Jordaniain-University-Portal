@@ -41,7 +41,7 @@ class AcademicRecord extends Model
             'probation' => 'إنذار أكاديمي',
             'warning' => 'تحذير',
             'excellent' => 'ممتاز',
-            'honor' => 'شرف'
+            'honor' => 'مشرف'
         ];
 
         return $statusMap[$this->semester_status] ?? $this->semester_status;
