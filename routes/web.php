@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AcademicResultsController;
+use App\Http\Controllers\FeePaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,4 +30,5 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware('auth:student')->group(function () {
     Route::get('/dashboard', [AcademicResultsController::class, 'dashboard'])->name('dashboard');
     Route::get('/academic-results', [AcademicResultsController::class, 'index'])->name('academic-results');
+    Route::get('/fee-payment', [FeePaymentController::class, 'index'])->name('fee-payment');
 });
