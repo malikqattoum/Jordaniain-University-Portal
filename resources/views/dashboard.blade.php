@@ -235,7 +235,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-4 mb-3">
-                        <a href="{{ route('academic-results') }}" class="text-decoration-none">
+                        <a href="{{ route('student.academic-results') }}" class="text-decoration-none">
                             <div class="card h-100 border-0 shadow-sm">
                                 <div class="card-body text-center">
                                     <i class="fas fa-chart-bar fa-3x text-primary mb-3"></i>

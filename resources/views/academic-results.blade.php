@@ -14,7 +14,7 @@
                 </h5>
             </div>
             <div class="card-body">
-                <form method="GET" action="{{ route('academic-results') }}">
+                <form method="GET" action="{{ route('student.academic-results') }}">
                     <div class="row">
                         <div class="col-md-4">
                             <label for="year" class="form-label">السنة الدراسية</label>
@@ -22,7 +22,7 @@
                                 <option value="">---</option>
                                 @foreach($academicYears as $year)
                                     <option value="{{ $year }}" {{ $selectedYear == $year ? 'selected' : '' }}>
-                                        {{ $year }} / {{ $year + 1 }}
+                                        {{ (int)$year }} / {{ (int)$year + 1 }}
                                     </option>
                                 @endforeach
                             </select>
@@ -55,7 +55,7 @@
             <div class="card-header">
                 <h5 class="mb-0">
                     <i class="fas fa-list me-2"></i>
-                    المواد المسجلة - {{ $selectedYear }}/{{ $selectedYear + 1 }} - الفصل
+                    المواد المسجلة - {{ (int)$selectedYear }}/{{ (int)$selectedYear + 1 }} - الفصل
                     @if($selectedSemester == 1) الأول
                     @elseif($selectedSemester == 2) الثاني
                     @elseif($selectedSemester == 3) الصيفي
@@ -80,7 +80,7 @@
                             <tr>
                                 <td>{{ $enrollment->course->course_code }}</td>
                                 <td>{{ $enrollment->course->course_name_ar }}</td>
-                                <td>{{ $enrollment->course->credit_hours }}</td>
+                                <td>{{ (float)$enrollment->course->credit_hours }}</td>
                                 <td>
                                     @if($enrollment->grade)
                                         <span class="badge bg-{{ $enrollment->is_passed ? 'success' : 'danger' }}">
@@ -123,23 +123,23 @@
             <div class="card-body">
                 <div class="academic-stats">
                     <div class="stat-card">
-                        <div class="stat-value">{{ $academicRecord->semester_credit_hours }}</div>
+                        <div class="stat-value">{{ (float)($academicRecord->semester_credit_hours ?? 0) }}</div>
                         <div class="stat-label">الساعات الفصلية</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-value">{{ $academicRecord->semester_gpa }}</div>
+                        <div class="stat-value">{{ (float)($academicRecord->semester_gpa ?? 0) }}</div>
                         <div class="stat-label">المعدل الفصلي</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-value">{{ $academicRecord->cumulative_credit_hours + ($equivalentCourses ? $equivalentCourses->sum('credit_hours') : 0) }}</div>
+                        <div class="stat-value">{{ (float)($academicRecord->cumulative_credit_hours ?? 0) + ($equivalentCourses ? (float)$equivalentCourses->sum('credit_hours') : 0) }}</div>
                         <div class="stat-label">الساعات التراكمية</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-value">{{ $academicRecord->cumulative_gpa }}</div>
+                        <div class="stat-value">{{ (float)($academicRecord->cumulative_gpa ?? 0) }}</div>
                         <div class="stat-label">المعدل التراكمي</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-value">{{ $academicRecord->successful_credit_hours + ($equivalentCourses ? $equivalentCourses->sum('credit_hours') : 0) }}</div>
+                        <div class="stat-value">{{ (float)($academicRecord->successful_credit_hours ?? 0) + ($equivalentCourses ? (float)$equivalentCourses->sum('credit_hours') : 0) }}</div>
                         <div class="stat-label">س.م. بنجاح</div>
                     </div>
                     <div class="stat-card">
@@ -149,7 +149,7 @@
                             @elseif($academicRecord->semester_status == 'warning') تحذير
                             @elseif($academicRecord->semester_status == 'excellent') ممتاز
                             @elseif($academicRecord->semester_status == 'honor') مشرف
-                            @else {{ $academicRecord->semester_status }}
+                            @else {{ $academicRecord->semester_status ?? 'غير محدد' }}
                             @endif
                         </div>
                         <div class="stat-label">مؤشر الفصل</div>

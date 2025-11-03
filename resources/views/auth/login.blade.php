@@ -31,7 +31,7 @@
 
         <!-- Login Form -->
         <div class="flex-fill p-4">
-            <form method="POST" action="{{ route('login') }}">
+            <form method="POST" action="{{ route('student.login') }}">
                 @csrf
 
                 <!-- Username Field -->
@@ -97,7 +97,7 @@
 
             <!-- Language Switch -->
             <div class="text-center">
-                <a href="{{ route('login', ['lang' => 'en']) }}" class="text-primary text-decoration-none small">English</a>
+                <a href="{{ route('student.login', ['lang' => 'en']) }}" class="text-primary text-decoration-none small">English</a>
             </div>
         </div>
     </div>

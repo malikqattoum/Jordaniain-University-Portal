@@ -202,7 +202,7 @@
         @auth('student')
         <!-- Sidebar -->
         <div class="layout-sidebar">
-            <a href="{{ route('dashboard') }}" class="logo">
+            <a href="{{ route('student.dashboard') }}" class="logo">
                 {{-- <i class="fas fa-university logo-image"></i> --}}
                 <img src="https://regapp.ju.edu.jo/regapp/javax.faces.resource/images/ujlogo.png.xhtml?ln=diamond-layout" alt="u-logo"
                     style="width: 80px; height: 80px; object-fit: contain;"
@@ -212,7 +212,7 @@
 
             <ul class="layout-menu">
                 <li>
-                    <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                    <a href="{{ route('student.dashboard') }}" class="{{ request()->routeIs('student.dashboard') ? 'active' : '' }}">
                         <i class="fas fa-home layout-menuitem-icon"></i>
                         <span>الصفحة الرئيسية</span>
                     </a>
@@ -230,8 +230,8 @@
                         <li><a href="#"><i class="fas fa-times layout-menuitem-icon"></i><span class="layout-menuitem-text">إلغاء طلبات فتح الشعب</span></a></li>
                         <li><a href="#"><i class="fas fa-minus layout-menuitem-icon"></i><span class="layout-menuitem-text">الانسحاب بدون ترصيد</span></a></li>
                         <li><a class="rotated-icon" href="#"><i class="fas fa-file-alt layout-menuitem-icon"></i><span class="layout-menuitem-text">العبء الدراسي الآلي</span></a></li>
-                        <li><a href="{{ route('fee-payment') }}" class="{{ request()->routeIs('fee-payment') ? 'active' : '' }}"><i class="fas fa-money-bill layout-menuitem-icon"></i><span class="layout-menuitem-text">تسديد الرسوم الجامعية</span></a></li>
-                        <li><a href="{{ route('payment-history') }}" class="{{ request()->routeIs('payment-history') ? 'active' : '' }}"><i class="fas fa-history layout-menuitem-icon"></i><span class="layout-menuitem-text">تاريخ المدفوعات</span></a></li>
+                        <li><a href="{{ route('student.fee-payment') }}" class="{{ request()->routeIs('student.fee-payment') ? 'active' : '' }}"><i class="fas fa-money-bill layout-menuitem-icon"></i><span class="layout-menuitem-text">تسديد الرسوم الجامعية</span></a></li>
+                        <li><a href="{{ route('student.payment-history') }}" class="{{ request()->routeIs('student.payment-history') ? 'active' : '' }}"><i class="fas fa-history layout-menuitem-icon"></i><span class="layout-menuitem-text">تاريخ المدفوعات</span></a></li>
                         <li><a href="#"><i class="fas fa-phone layout-menuitem-icon"></i><span class="layout-menuitem-text">بيانات الطالب الشخصية</span></a></li>
                     </ul>
                 </li>
@@ -260,7 +260,7 @@
                     <ul id="inqMenu" class="collapse fade-in-right" role="menu">
                         <li><a href="#"><i class="fas fa-print layout-menuitem-icon"></i><span class="layout-menuitem-text">طباعة الجدول والقسيمة</span></a></li>
                         <li><a href="#"><i class="fas fa-percentage layout-menuitem-icon"></i><span class="layout-menuitem-text">نتائج منتصف الفصل</span></a></li>
-                        <li><a href="{{ route('academic-results') }}" class="{{ request()->routeIs('academic-results') ? 'active' : '' }}"><i class="fas fa-chart-bar layout-menuitem-icon"></i><span class="layout-menuitem-text">نتائج الطالب النهائية</span></a></li>
+                        <li><a href="{{ route('student.academic-results') }}" class="{{ request()->routeIs('student.academic-results') ? 'active' : '' }}"><i class="fas fa-chart-bar layout-menuitem-icon"></i><span class="layout-menuitem-text">نتائج الطالب النهائية</span></a></li>
                         <li><a href="#"><i class="fas fa-table layout-menuitem-icon"></i><span class="layout-menuitem-text">الجدول الدراسي</span></a></li>
                         <li><a href="#"><i class="fas fa-search layout-menuitem-icon"></i><span class="layout-menuitem-text">الاستفسار عن المواد المطروحة</span></a></li>
                         <li><a href="#"><i class="fas fa-list layout-menuitem-icon"></i><span class="layout-menuitem-text">الخطة الدراسية</span></a></li>
@@ -314,7 +314,7 @@
 
     <!-- Logout Form -->
     @auth('student')
-    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+    <form id="logout-form" action="{{ route('student.logout') }}" method="POST" style="display: none;">
         @csrf
     </form>
     @endauth
