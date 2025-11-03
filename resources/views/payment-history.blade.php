@@ -1,0 +1,305 @@
+@extends('layouts.app')
+
+@section('title', 'تاريخ المدفوعات - بوابة طلاب الجامعة الأردنية')
+@section('page-title', 'تاريخ المدفوعات والأرصدة')
+
+@section('content')
+<div class="row">
+    <!-- Financial Summary Card -->
+    <div class="col-12 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-chart-pie me-2"></i>
+                    الملخص المالي
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="financial-summary-item">
+                            <div class="summary-value text-success">
+                                {{ number_format($financialSummary['total_paid_amount'], 2) }} دينار
+                            </div>
+                            <div class="summary-label">إجمالي المدفوعات</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="financial-summary-item">
+                            <div class="summary-value text-danger">
+                                {{ number_format($financialSummary['total_outstanding_balance'], 2) }} دينار
+                            </div>
+                            <div class="summary-label">المبلغ المستحق</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="financial-summary-item">
+                            <div class="summary-value text-info">
+                                {{ number_format($financialSummary['current_semester']['balance_due'], 2) }} دينار
+                            </div>
+                            <div class="summary-label">رصيد الفصل الحالي</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="financial-summary-item">
+                            <div class="summary-value text-warning">
+                                {{ number_format($financialSummary['previous_unpaid_balance'], 2) }} دينار
+                            </div>
+                            <div class="summary-label">رصيد الفصول السابقة</div>
+                        </div>
+                    </div>
+                </div>
+
+                @if($financialSummary['registration_hold'])
+                <div class="mt-3">
+                    <div class="alert alert-warning" role="alert">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>تنبيه:</strong> يوجد رصيد مستحق قد يؤثر على تسجيل الفصول القادمة. الرجاء تسوية المبلغ المستحق.
+                    </div>
+                </div>
+                @endif
+            </div>
+        </div>
+    </div>
+
+    <!-- Current Semester Details -->
+    @if($financialSummary['current_semester']['credit_hours'] > 0)
+    <div class="col-12 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-calendar-alt me-2"></i>
+                    تفاصيل الفصل الدراسي الحالي - {{ $financialSummary['current_semester']['semester_name'] }}
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <table class="table table-borderless">
+                            <tr>
+                                <td><strong>عدد الساعات الفصلية:</strong></td>
+                                <td>{{ number_format($financialSummary['current_semester']['credit_hours'], 1) }} ساعة</td>
+                            </tr>
+                            <tr>
+                                <td><strong>سعر الساعة الواحدة:</strong></td>
+                                <td>{{ number_format($financialSummary['current_semester']['hourly_rate'], 2) }} دينار</td>
+                            </tr>
+                            <tr>
+                                <td><strong>رسوم التعلم:</strong></td>
+                                <td>{{ number_format($financialSummary['current_semester']['tuition_amount'], 2) }} دينار</td>
+                            </tr>
+                            <tr>
+                                <td><strong>رسوم الفصل الدراسي:</strong></td>
+                                <td>{{ number_format($financialSummary['current_semester']['semester_fees'], 2) }} دينار</td>
+                            </tr>
+                            <tr class="table-info">
+                                <td><strong>إجمالي المطلوب:</strong></td>
+                                <td><strong>{{ number_format($financialSummary['current_semester']['total_due'], 2) }} دينار</strong></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <table class="table table-borderless">
+                            <tr>
+                                <td><strong>المدفوعات السابقة:</strong></td>
+                                <td class="text-success">-{{ number_format($financialSummary['current_semester']['payments_made'], 2) }} دينار</td>
+                            </tr>
+                            <tr class="table-warning">
+                                <td><strong>الرصيد المستحق:</strong></td>
+                                <td><strong>{{ number_format($financialSummary['current_semester']['balance_due'], 2) }} دينار</strong></td>
+                            </tr>
+                        </table>
+
+                        @if($financialSummary['current_semester']['balance_due'] > 0)
+                        <div class="text-center mt-3">
+                            <a href="{{ route('fee-payment') }}" class="btn btn-primary">
+                                <i class="fas fa-credit-card me-2"></i>
+                                تسديد المبلغ المستحق
+                            </a>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+
+    <!-- Payments by Academic Year -->
+    @if($financialSummary['payments_by_year']->count() > 0)
+    <div class="col-12 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-chart-bar me-2"></i>
+                    المدفوعات حسب السنة الأكاديمية
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>السنة الأكاديمية</th>
+                                <th class="text-center">إجمالي المدفوعات</th>
+                                <th class="text-center">الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($financialSummary['payments_by_year'] as $paymentYear)
+                            <tr>
+                                <td>{{ $paymentYear->academic_year }}</td>
+                                <td class="text-center">{{ number_format($paymentYear->total_paid, 2) }} دينار</td>
+                                <td class="text-center">
+                                    <button class="btn btn-sm btn-outline-primary" onclick="showYearPayments('{{ $paymentYear->academic_year }}')">
+                                        <i class="fas fa-eye"></i> عرض التفاصيل
+                                    </button>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+
+    <!-- Payment History Table -->
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-history me-2"></i>
+                    سجل المدفوعات
+                </h5>
+            </div>
+            <div class="card-body">
+                @if($payments->count() > 0)
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>رقم الإيصال</th>
+                                <th>السنة الأكاديمية</th>
+                                <th>الفصل الدراسي</th>
+                                <th class="text-center">المبلغ</th>
+                                <th class="text-center">طريقة الدفع</th>
+                                <th class="text-center">الحالة</th>
+                                <th class="text-center">تاريخ الدفع</th>
+                                <th class="text-center">الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($payments as $payment)
+                            <tr>
+                                <td>
+                                    <strong>{{ $payment->receipt_number }}</strong>
+                                </td>
+                                <td>{{ $payment->academic_year }}</td>
+                                <td>{{ $payment->semester_name }}</td>
+                                <td class="text-center">
+                                    <strong>{{ number_format($payment->amount_paid, 2) }} دينار</strong>
+                                </td>
+                                <td class="text-center">
+                                    @if($payment->payment_method === 'credit_card')
+                                        <i class="fas fa-credit-card text-primary"></i>
+                                        @if($payment->card_type === 'local')
+                                            بطاقة محلية
+                                        @else
+                                            بطاقة دولية
+                                        @endif
+                                    @else
+                                        {{ $payment->payment_method }}
+                                    @endif
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge bg-{{ $payment->status_badge_class }}">
+                                        @switch($payment->status)
+                                            @case('completed')
+                                                مكتملة
+                                                @break
+                                            @case('pending')
+                                                معلقة
+                                                @break
+                                            @case('failed')
+                                                فاشلة
+                                                @break
+                                            @case('refunded')
+                                                مستردة
+                                                @break
+                                            @default
+                                                {{ $payment->status }}
+                                        @endswitch
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    {{ $payment->created_at->format('Y-m-d H:i') }}
+                                </td>
+                                <td class="text-center">
+                                    <a href="{{ route('payment-receipt', $payment->id) }}" class="btn btn-sm btn-outline-info">
+                                        <i class="fas fa-file-invoice"></i>
+                                        إيصال
+                                    </a>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="d-flex justify-content-center mt-4">
+                    {{ $payments->links() }}
+                </div>
+                @else
+                <div class="text-center py-4">
+                    <i class="fas fa-receipt fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">لا توجد مدفوعات مسجلة</h5>
+                    <p class="text-muted">لم تقم بأي مدفوعات حتى الآن.</p>
+                </div>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.financial-summary-item {
+    text-align: center;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.summary-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.summary-label {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+@media (max-width: 768px) {
+    .financial-summary-item {
+        margin-bottom: 1rem;
+    }
+
+    .summary-value {
+        font-size: 1.2rem;
+    }
+}
+</style>
+
+<script>
+function showYearPayments(academicYear) {
+    // This would filter payments by academic year
+    // For now, just show an alert
+    alert('عرض تفاصيل المدفوعات لسنة ' + academicYear);
+}
+</script>
+@endsection

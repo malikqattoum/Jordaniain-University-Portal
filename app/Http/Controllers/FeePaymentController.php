@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Student;
 use App\Models\Enrollment;
 use App\Models\MajorPricing;
+use App\Models\SemesterFee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -33,8 +34,15 @@ class FeePaymentController extends Controller
         // Get major pricing configuration
         $majorPricing = $this->getMajorPricing($student->major);
 
-        // Calculate base amount
-        $baseAmount = $currentCreditHours * $majorPricing['hourly_rate'];
+        // Calculate tuition amount (credit hours × hourly rate)
+        $tuitionAmount = $currentCreditHours * $majorPricing['hourly_rate'];
+
+        // Get current semester fees
+        $semesterFee = SemesterFee::getActive();
+        $semesterFeesAmount = $semesterFee ? $semesterFee->semester_fees : 0;
+
+        // Calculate total base amount (tuition + semester fees)
+        $baseAmount = $tuitionAmount + $semesterFeesAmount;
 
         // Calculate payment processing fees
         $paymentFees = $this->calculatePaymentFees($baseAmount);
@@ -47,6 +55,9 @@ class FeePaymentController extends Controller
         $feeBreakdown = [
             'credit_hours' => $currentCreditHours,
             'hourly_rate' => $majorPricing['hourly_rate'],
+            'tuition_amount' => $tuitionAmount,
+            'semester_fees_amount' => $semesterFeesAmount,
+            'semester_fee_info' => $semesterFee,
             'base_amount' => $baseAmount,
             'payment_fees' => $paymentFees,
             'total_amount_due' => $totalAmountDue,
@@ -69,7 +80,7 @@ class FeePaymentController extends Controller
             return [
                 'name' => $majorPricing->major_name,
                 'hourly_rate' => $majorPricing->hourly_rate,
-                'currency' => $majorPricing->currency
+                'currency' => 'JOD'
             ];
         }
 
@@ -80,33 +91,36 @@ class FeePaymentController extends Controller
 
         // Try to find exact match first
         if (isset($configPricing[$majorKey])) {
+            $configPricing[$majorKey]['currency'] = 'JOD';
             return $configPricing[$majorKey];
         }
 
         // Try partial matching for common variations
         foreach ($configPricing as $key => $data) {
             if (strpos($majorKey, $key) !== false || strpos($key, $majorKey) !== false) {
+                $data['currency'] = 'JOD';
                 return $data;
             }
         }
 
         // Return default (Law)
+        $configPricing[$defaultKey]['currency'] = 'JOD';
         return $configPricing[$defaultKey];
     }
 
     /**
-     * Calculate payment processing fees
+     * Calculate payment processing fees (in Jordanian Dinars)
      */
     private function calculatePaymentFees($baseAmount)
     {
-        // Local cards: 0.55% + 0.09 fixed fee
+        // Local cards: 0.55% + 1.30 JOD fixed fee
         $localPercentage = 0.0055;
-        $localFixedFee = 0.09;
+        $localFixedFee = 1.30; // 1.3 JOD fixed fee
         $localTotalFees = ($baseAmount * $localPercentage) + $localFixedFee;
 
-        // International cards: 1.95% + 0.09 fixed fee
+        // International cards: 1.95% + 1.30 JOD fixed fee
         $internationalPercentage = 0.0195;
-        $internationalFixedFee = 0.09;
+        $internationalFixedFee = 1.30; // 1.3 JOD fixed fee
         $internationalTotalFees = ($baseAmount * $internationalPercentage) + $internationalFixedFee;
 
         return [

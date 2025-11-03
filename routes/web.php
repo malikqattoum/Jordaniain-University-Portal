@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AcademicResultsController;
 use App\Http\Controllers\FeePaymentController;
+use App\Http\Controllers\PaymentHistoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,4 +32,6 @@ Route::middleware('auth:student')->group(function () {
     Route::get('/dashboard', [AcademicResultsController::class, 'dashboard'])->name('dashboard');
     Route::get('/academic-results', [AcademicResultsController::class, 'index'])->name('academic-results');
     Route::get('/fee-payment', [FeePaymentController::class, 'index'])->name('fee-payment');
+    Route::get('/payment-history', [PaymentHistoryController::class, 'index'])->name('payment-history');
+    Route::get('/payment-receipt/{id}', [PaymentHistoryController::class, 'show'])->name('payment-receipt');
 });

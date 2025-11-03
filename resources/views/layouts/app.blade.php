@@ -231,6 +231,7 @@
                         <li><a href="#"><i class="fas fa-minus layout-menuitem-icon"></i><span class="layout-menuitem-text">الانسحاب بدون ترصيد</span></a></li>
                         <li><a class="rotated-icon" href="#"><i class="fas fa-file-alt layout-menuitem-icon"></i><span class="layout-menuitem-text">العبء الدراسي الآلي</span></a></li>
                         <li><a href="{{ route('fee-payment') }}" class="{{ request()->routeIs('fee-payment') ? 'active' : '' }}"><i class="fas fa-money-bill layout-menuitem-icon"></i><span class="layout-menuitem-text">تسديد الرسوم الجامعية</span></a></li>
+                        <li><a href="{{ route('payment-history') }}" class="{{ request()->routeIs('payment-history') ? 'active' : '' }}"><i class="fas fa-history layout-menuitem-icon"></i><span class="layout-menuitem-text">تاريخ المدفوعات</span></a></li>
                         <li><a href="#"><i class="fas fa-phone layout-menuitem-icon"></i><span class="layout-menuitem-text">بيانات الطالب الشخصية</span></a></li>
                     </ul>
                 </li>

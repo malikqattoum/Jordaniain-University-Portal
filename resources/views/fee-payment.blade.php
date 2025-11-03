@@ -24,7 +24,7 @@
                         <strong>بطاقات الإئتمان Master Card أو Visa Card</strong>
                         <br>
                         <small class="text-muted">
-                            (هذه الخدمه متاحة متاحة للرسوم المطلوبه بالدينار الاردني أو الدولار الأمريكي.)
+                            (هذه الخدمه متاحة متاحة للرسوم المطلوبه بالدينار )
                         </small>
                     </li>
                 </ul>
@@ -34,7 +34,7 @@
                     <br>
                     عند التسديد باستخدام بطاقات الائتمان سيتم إضافة عمولة بقيمة
                     <strong>0.55%</strong> للبطاقات المحلية، و <strong>1.95%</strong> للبطاقات الدوليه
-                    أضافة الى عمولة ثابتة بقيمة <strong>9 قروش</strong> لجميع البطاقات.
+                    أضافة الى عمولة ثابتة بقيمة <strong>1.30 دينار</strong> لجميع البطاقات.
                 </div>
             </div>
         </div>
@@ -64,26 +64,42 @@
                             </div>
                             <div class="fee-detail-item">
                                 <strong>سعر الساعة الواحدة:</strong>
-                                <span>${{ number_format($feeBreakdown['hourly_rate'], 2) }}</span>
+                                <span>{{ number_format($feeBreakdown['hourly_rate'], 2) }} دينار</span>
                             </div>
-                            <div class="fee-detail-item">
-                                <strong>المبلغ الأساسي:</strong>
-                                <span>${{ number_format($feeBreakdown['base_amount'], 2) }}</span>
+                            <div class="fee-detail-item bg-light p-3 rounded mb-3">
+                                <strong>رسوم التعلم (المصروفات الدراسية):</strong>
+                                <div class="fs-5 text-primary">
+                                    {{ number_format($feeBreakdown['tuition_amount'], 2) }} دينار
+                                </div>
+                                <small class="text-muted">
+                                    ({{ number_format($feeBreakdown['credit_hours'], 1) }} ساعة × {{ number_format($feeBreakdown['hourly_rate'], 2) }} دينار)
+                                </small>
                             </div>
                         </div>
                         <div class="col-md-6">
+                            @if($feeBreakdown['semester_fee_info'])
+                            <div class="fee-detail-item bg-light p-3 rounded mb-3">
+                                <strong>رسوم الفصل الدراسي:</strong>
+                                <div class="fs-5 text-success">
+                                    {{ number_format($feeBreakdown['semester_fees_amount'], 2) }} دينار
+                                </div>
+                                <small class="text-muted">
+                                    {{ $feeBreakdown['semester_fee_info']->semester_name }}
+                                </small>
+                            </div>
+                            @endif
                             <div class="fee-detail-item">
                                 <strong>رسوم البطاقات المحلية:</strong>
-                                <span>${{ number_format($feeBreakdown['payment_fees']['local']['amount'], 2) }}</span>
+                                <span>{{ number_format($feeBreakdown['payment_fees']['local']['amount'], 2) }} دينار</span>
                                 <small class="text-muted d-block">
-                                    ({{ number_format($feeBreakdown['payment_fees']['local']['percentage'] * 100, 2) }}% + ${{ number_format($feeBreakdown['payment_fees']['local']['fixed_fee'], 2) }})
+                                    ({{ number_format($feeBreakdown['payment_fees']['local']['percentage'] * 100, 2) }}% + {{ number_format($feeBreakdown['payment_fees']['local']['fixed_fee'], 2) }} دينار)
                                 </small>
                             </div>
                             <div class="fee-detail-item">
                                 <strong>رسوم البطاقات الدولية:</strong>
-                                <span>${{ number_format($feeBreakdown['payment_fees']['international']['amount'], 2) }}</span>
+                                <span>{{ number_format($feeBreakdown['payment_fees']['international']['amount'], 2) }} دينار</span>
                                 <small class="text-muted d-block">
-                                    ({{ number_format($feeBreakdown['payment_fees']['international']['percentage'] * 100, 2) }}% + ${{ number_format($feeBreakdown['payment_fees']['international']['fixed_fee'], 2) }})
+                                    ({{ number_format($feeBreakdown['payment_fees']['international']['percentage'] * 100, 2) }}% + {{ number_format($feeBreakdown['payment_fees']['international']['fixed_fee'], 2) }} دينار)
                                 </small>
                             </div>
                         </div>
@@ -99,11 +115,17 @@
                                     <strong>المبلغ الإجمالي المستحق:</strong>
                                 </h4>
                                 <div class="amount-value">
-                                    ${{ number_format($feeBreakdown['total_amount_due'], 2) }} دولار
+                                    {{ number_format($feeBreakdown['total_amount_due'], 2) }} دينار
                                 </div>
                                 <small class="text-muted">
                                     (يشمل رسوم المعالجة المتوسطة)
                                 </small>
+                                <div class="mt-2">
+                                    <small class="text-muted">
+                                        المبلغ الأساسي: {{ number_format($feeBreakdown['base_amount'], 2) }} دينار
+                                        + رسوم المعالجة المتوسطة
+                                    </small>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -129,7 +151,7 @@
                         </div>
                         <h4 class="text-success">لا يوجد رسوم مطلوبة</h4>
                         <p class="text-muted">
-                            المبلغ المستحق: 0.0 دولار
+                            المبلغ المستحق: 0.0 دينار
                         </p>
                         <p class="text-muted">
                             لا يوجد أي رسوم مطلوبة للفصل الدراسي الحالي.
