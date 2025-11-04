@@ -17,12 +17,27 @@ class Enrollment extends Model
         'grade',
         'grade_points',
         'status',
-        'is_passed'
+        'is_passed',
+        'prerequisite',
+        'nature',
+        'teaching_method',
+        'course_index',
+        'accounting_code',
+        'section',
+        'section_number',
+        'schedule_days',
+        'schedule_time',
+        'schedule_day',
+        'is_in_person',
+        'room',
+        'instructor_name'
     ];
 
     protected $casts = [
         'grade_points' => 'decimal:2',
         'is_passed' => 'boolean',
+        'is_in_person' => 'boolean',
+        'section_number' => 'integer',
     ];
 
     public function student()

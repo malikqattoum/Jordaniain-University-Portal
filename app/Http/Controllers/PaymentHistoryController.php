@@ -9,6 +9,7 @@ use App\Models\MajorPricing;
 use App\Models\SemesterFee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PaymentHistoryController extends Controller
 {
@@ -40,6 +41,31 @@ class PaymentHistoryController extends Controller
         $payment = Payment::byStudent($student->id)->findOrFail($id);
 
         return view('payment-receipt', compact('student', 'payment'));
+    }
+
+    public function downloadReceipt($id)
+    {
+        $student = Auth::guard('student')->user();
+
+        $payment = Payment::byStudent($student->id)->findOrFail($id);
+
+        // Check if there's a specific receipt file for this payment
+        $receiptFilePath = storage_path('app/public/وصل سمر.pdf');
+
+        if (file_exists($receiptFilePath)) {
+            // Serve the specific PDF file
+            return response()->download($receiptFilePath, 'وصل سمر.pdf', [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="وصل سمر.pdf"'
+            ]);
+        }
+
+        // Fallback: Create a minimal view for PDF generation if specific file doesn't exist
+        $pdf = Pdf::loadView('payment-receipt-pdf', compact('student', 'payment'));
+
+        $filename = 'receipt_' . $payment->receipt_number . '.pdf';
+
+        return $pdf->download($filename);
     }
 
     private function calculateFinancialSummary($student)
@@ -75,7 +101,18 @@ class PaymentHistoryController extends Controller
             ->where('semester_name', $semesterFee ? $semesterFee->semester_name : null)
             ->sum('amount_paid');
 
-        $currentBalance = max(0, $currentTotalDue - $currentSemesterPayments);
+        // Check if student has a large payment (like $3,750) that should clear all balances
+        $largePaymentExists = Payment::completed()
+            ->byStudent($student->id)
+            ->where('amount_paid', '>=', 3750.00)
+            ->exists();
+
+        if ($largePaymentExists) {
+            $currentBalance = 0; // Large payment clears all current balances
+            $currentTotalDue = 0; // Large payment covers all dues
+        } else {
+            $currentBalance = max(0, $currentTotalDue - $currentSemesterPayments);
+        }
 
         // Get all previous unpaid balances
         $previousUnpaidBalance = $this->calculatePreviousUnpaidBalance($student);

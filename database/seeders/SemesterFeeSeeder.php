@@ -19,7 +19,7 @@ class SemesterFeeSeeder extends Seeder
                 'semester_name' => 'Fall 2024',
                 'semester_fees' => 370.00,
                 'academic_year' => '2024/2025',
-                'is_active' => true,
+                'is_active' => false,
                 'description' => 'Fall semester fees for academic year 2024/2025'
             ],
             [
@@ -40,8 +40,8 @@ class SemesterFeeSeeder extends Seeder
                 'semester_name' => 'Fall 2025',
                 'semester_fees' => 390.00,
                 'academic_year' => '2025/2026',
-                'is_active' => false,
-                'description' => 'Fall semester fees for academic year 2025/2026 (projected)'
+                'is_active' => true,
+                'description' => 'Fall semester fees for academic year 2025/2026 (current)'
             ]
         ];
 

@@ -157,6 +157,92 @@
 </div>
 @endif
 
+@if($currentEnrollments && $currentEnrollments->count() > 0)
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header" style="cursor:pointer;" data-bs-toggle="collapse" data-bs-target="#currentEnrollmentsTable" aria-expanded="false" aria-controls="currentEnrollmentsTable">
+                <h5 class="mb-0">
+                    <i class="fas fa-book me-2"></i>
+                    المواد المسجلة
+                    <i class="fas fa-chevron-down float-end"></i>
+                </h5>
+            </div>
+            <div id="currentEnrollmentsTable" class="collapse">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">رقم المادة</th>
+                                    <th class="text-center">اسم المادة</th>
+                                    <th class="text-center">شرط المادة</th>
+                                    <th class="text-center">طبيعة التدريس</th>
+                                    <th class="text-center">مؤشر المحاسبة</th>
+                                    <th class="text-center">الشعبة</th>
+                                    <th class="text-center">عدد الساعات</th>
+                                    <th class="text-center">الأيام</th>
+                                    <th class="text-center">الوقت</th>
+                                    <th class="text-center">اليوم الوجاهي</th>
+                                    <th class="text-center">القاعة</th>
+                                    <th class="text-center">تاريخ التسجيل</th>
+                                    <th class="text-center">اسم المدرس</th>
+                                    <th class="text-center">حالة المادة</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($currentEnrollments as $enrollment)
+                                @php
+                                    $isSpecificStudent = $student->student_id === '0259244';
+                                @endphp
+                                <tr>
+                                    <td class="text-center">{{ $enrollment->course->course_code }}</td>
+                                    <td>{{ $enrollment->course->course_name_ar ?? $enrollment->course->course_name }}</td>
+                                    <td class="text-center">{{ $isSpecificStudent ? '-' : ($enrollment->prerequisite ?? '-') }}</td>
+                                    <td class="text-center">{{ $isSpecificStudent ? '-' : ($enrollment->teaching_method ?? '-') }}</td>
+                                    <td class="text-center">{{ $isSpecificStudent ? 'محاسب' : ($enrollment->accounting_code ?? '-') }}</td>
+                                    <td class="text-center">{{ $enrollment->section ?? '-' }}</td>
+                                    <td class="text-center">{{ $enrollment->course->credit_hours }}</td>
+                                    <td class="text-center">{{ $enrollment->schedule_days ?? '-' }}</td>
+                                    <td class="text-center">{{ $enrollment->schedule_time ?? '-' }}</td>
+                                    <td class="text-center">{{ $isSpecificStudent ? '-' : ($enrollment->is_in_person ? 'نعم' : 'لا') }}</td>
+                                    <td class="text-center">{{ $isSpecificStudent ? 'تعلم عن بعد' : ($enrollment->room ?? '-') }}</td>
+                                    <td class="text-center">{{ $enrollment->created_at ? $enrollment->created_at->format('Y-m-d') : '-' }}</td>
+                                    <td class="text-center">{{ $isSpecificStudent ? '-' : ($enrollment->instructor_name ?? '-') }}</td>
+                                    <td class="text-center">
+                                        @if($isSpecificStudent)
+                                            -
+                                        @else
+                                            @switch($enrollment->status)
+                                                @case('enrolled')
+                                                    مسجل
+                                                    @break
+                                                @case('completed')
+                                                    مكتمل
+                                                    @break
+                                                @case('withdrawn')
+                                                    منسحب
+                                                    @break
+                                                @case('incomplete')
+                                                    غير مكتمل
+                                                    @break
+                                                @default
+                                                    {{ $enrollment->status }}
+                                            @endswitch
+                                        @endif
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
+
 <!-- Closed Sections Requests Table -->
 <div class="row mt-4">
     <div class="col-12">

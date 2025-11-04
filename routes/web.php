@@ -42,6 +42,7 @@ Route::middleware('auth:student')->group(function () {
     Route::get('/fee-payment', [FeePaymentController::class, 'index'])->name('student.fee-payment');
     Route::get('/payment-history', [PaymentHistoryController::class, 'index'])->name('student.payment-history');
     Route::get('/payment-receipt/{id}', [PaymentHistoryController::class, 'show'])->name('student.payment-receipt');
+    Route::get('/payment-receipt/{id}/download', [PaymentHistoryController::class, 'downloadReceipt'])->name('student.payment-receipt.download');
 });
 
 // Admin Authentication Routes

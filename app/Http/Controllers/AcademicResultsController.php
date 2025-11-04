@@ -136,6 +136,12 @@ class AcademicResultsController extends Controller
         // Get equivalent courses for the student
         $equivalentCourses = $student->equivalentCourses()->get();
 
-        return view('dashboard', compact('student', 'graduationProgress', 'equivalentCourses'));
+        // Get current semester registered subjects (enrolled status)
+        $currentEnrollments = Enrollment::with('course')
+            ->where('student_id', $student->id)
+            ->where('status', 'enrolled')
+            ->get();
+
+        return view('dashboard', compact('student', 'graduationProgress', 'equivalentCourses', 'currentEnrollments'));
     }
 }

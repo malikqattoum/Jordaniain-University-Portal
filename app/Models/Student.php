@@ -18,6 +18,9 @@ class Student extends Authenticatable
         'email',
         'password',
         'passport_number',
+        'date_of_birth',
+        'national_id',
+        'place_of_birth',
         'college',
         'major',
         'academic_year',
@@ -94,7 +97,8 @@ class Student extends Authenticatable
             'جاسم' => 'jsm',
             'حسن' => 'hsn',
             'ظافر' => 'dhf',
-            'فهد' => 'fhd'
+            'فهد' => 'fhd',
+            'سمر' => 'smr'
         ];
 
         return $nameMap[$arabicName] ?? substr(str_replace(['ا', 'ة', 'ي', 'و'], '', $arabicName), 0, 3);

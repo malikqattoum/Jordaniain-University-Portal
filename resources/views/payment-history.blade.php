@@ -19,7 +19,7 @@
                     <div class="col-md-3">
                         <div class="financial-summary-item">
                             <div class="summary-value text-success">
-                                {{ number_format($financialSummary['total_paid_amount'], 2) }} دينار
+                                ${{ number_format($financialSummary['total_paid_amount'], 2) }}
                             </div>
                             <div class="summary-label">إجمالي المدفوعات</div>
                         </div>
@@ -27,7 +27,7 @@
                     <div class="col-md-3">
                         <div class="financial-summary-item">
                             <div class="summary-value text-danger">
-                                {{ number_format($financialSummary['total_outstanding_balance'], 2) }} دينار
+                                ${{ number_format($financialSummary['total_outstanding_balance'], 2) }}
                             </div>
                             <div class="summary-label">المبلغ المستحق</div>
                         </div>
@@ -35,7 +35,7 @@
                     <div class="col-md-3">
                         <div class="financial-summary-item">
                             <div class="summary-value text-info">
-                                {{ number_format($financialSummary['current_semester']['balance_due'], 2) }} دينار
+                                ${{ number_format($financialSummary['current_semester']['balance_due'], 2) }}
                             </div>
                             <div class="summary-label">رصيد الفصل الحالي</div>
                         </div>
@@ -43,7 +43,7 @@
                     <div class="col-md-3">
                         <div class="financial-summary-item">
                             <div class="summary-value text-warning">
-                                {{ number_format($financialSummary['previous_unpaid_balance'], 2) }} دينار
+                                ${{ number_format($financialSummary['previous_unpaid_balance'], 2) }}
                             </div>
                             <div class="summary-label">رصيد الفصول السابقة</div>
                         </div>
@@ -82,19 +82,19 @@
                             </tr>
                             <tr>
                                 <td><strong>سعر الساعة الواحدة:</strong></td>
-                                <td>{{ number_format($financialSummary['current_semester']['hourly_rate'], 2) }} دينار</td>
+                                <td>${{ number_format($financialSummary['current_semester']['hourly_rate'], 2) }}</td>
                             </tr>
                             <tr>
                                 <td><strong>رسوم التعلم:</strong></td>
-                                <td>{{ number_format($financialSummary['current_semester']['tuition_amount'], 2) }} دينار</td>
+                                <td>${{ number_format($financialSummary['current_semester']['tuition_amount'], 2) }}</td>
                             </tr>
                             <tr>
                                 <td><strong>رسوم الفصل الدراسي:</strong></td>
-                                <td>{{ number_format($financialSummary['current_semester']['semester_fees'], 2) }} دينار</td>
+                                <td>${{ number_format($financialSummary['current_semester']['semester_fees'], 2) }}</td>
                             </tr>
                             <tr class="table-info">
                                 <td><strong>إجمالي المطلوب:</strong></td>
-                                <td><strong>{{ number_format($financialSummary['current_semester']['total_due'], 2) }} دينار</strong></td>
+                                <td><strong>${{ number_format($financialSummary['current_semester']['total_due'], 2) }}</strong></td>
                             </tr>
                         </table>
                     </div>
@@ -102,11 +102,11 @@
                         <table class="table table-borderless">
                             <tr>
                                 <td><strong>المدفوعات السابقة:</strong></td>
-                                <td class="text-success">-{{ number_format($financialSummary['current_semester']['payments_made'], 2) }} دينار</td>
+                                <td class="text-success">-${{ number_format($financialSummary['current_semester']['payments_made'], 2) }}</td>
                             </tr>
                             <tr class="table-warning">
                                 <td><strong>الرصيد المستحق:</strong></td>
-                                <td><strong>{{ number_format($financialSummary['current_semester']['balance_due'], 2) }} دينار</strong></td>
+                                <td><strong>${{ number_format($financialSummary['current_semester']['balance_due'], 2) }}</strong></td>
                             </tr>
                         </table>
 
@@ -149,7 +149,7 @@
                             @foreach($financialSummary['payments_by_year'] as $paymentYear)
                             <tr>
                                 <td>{{ $paymentYear->academic_year }}</td>
-                                <td class="text-center">{{ number_format($paymentYear->total_paid, 2) }} دينار</td>
+                                <td class="text-center">${{ number_format($paymentYear->total_paid, 2) }}</td>
                                 <td class="text-center">
                                     <button class="btn btn-sm btn-outline-primary" onclick="showYearPayments('{{ $paymentYear->academic_year }}')">
                                         <i class="fas fa-eye"></i> عرض التفاصيل
@@ -199,7 +199,7 @@
                                 <td>{{ $payment->academic_year }}</td>
                                 <td>{{ $payment->semester_name }}</td>
                                 <td class="text-center">
-                                    <strong>{{ number_format($payment->amount_paid, 2) }} دينار</strong>
+                                    <strong>${{ number_format($payment->amount_paid, 2) }}</strong>
                                 </td>
                                 <td class="text-center">
                                     @if($payment->payment_method === 'credit_card')
@@ -237,8 +237,8 @@
                                     {{ $payment->created_at->format('Y-m-d H:i') }}
                                 </td>
                                 <td class="text-center">
-                                    <a href="{{ route('student.payment-receipt', $payment->id) }}" class="btn btn-sm btn-outline-info">
-                                        <i class="fas fa-file-invoice"></i>
+                                    <a href="{{ route('student.payment-receipt.download', $payment->id) }}" class="btn btn-sm btn-outline-info" target="_blank">
+                                        <i class="fas fa-download"></i>
                                         إيصال
                                     </a>
                                 </td>
