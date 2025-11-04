@@ -1,9 +1,0 @@
-SSH Migration Test
-==================
-
-This is a test file to verify SSH authentication for GitHub repository.
-
-Date: 2025-11-04
-Repository: Jordaniain-University-Portal
-User: malikqattoum
-Authentication: SSH (git@github.com:malikqattoum/Jordaniain-University-Portal.git)
